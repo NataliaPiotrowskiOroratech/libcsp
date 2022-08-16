@@ -1,7 +1,7 @@
 /*
 Cubesat Space Protocol - A small network-layer protocol designed for Cubesats
 Copyright (C) 2012 Gomspace ApS (http://www.gomspace.com)
-Copyright (C) 2012 AAUSAT3 Project (http://aausat3.space.aau.dk) 
+Copyright (C) 2012 AAUSAT3 Project (http://aausat3.space.aau.dk)
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -18,21 +18,21 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#define CSP_USE_ASSERT 1  // always enable CSP assert
+#define CSP_USE_ASSERT 1 // always enable CSP assert
 
-#include <csp/csp_debug.h>
-#include <csp/arch/csp_thread.h>
 #include <csp/arch/csp_clock.h>
-#include <csp/arch/csp_time.h>
 #include <csp/arch/csp_malloc.h>
 #include <csp/arch/csp_queue.h>
 #include <csp/arch/csp_semaphore.h>
+#include <csp/arch/csp_thread.h>
+#include <csp/arch/csp_time.h>
+#include <csp/csp_debug.h>
 
 #include <stdlib.h>
 
 static bool thread_executed = false;
 
-void csp_assert_fail_action(const char *assertion, const char *file, int line) {
+void csp_assert_fail_action(const char* assertion, const char* file, int line) {
     printf("assertion: [%s], file: %s:%d\r\n", assertion, file, line);
     exit(1);
 }
@@ -45,7 +45,7 @@ CSP_DEFINE_TASK(thread_func) {
     return CSP_TASK_RETURN;
 }
 
-int main(int argc, char * argv[]) {
+int main(int argc, char* argv[]) {
 
     // debug/log - enable all levels
     for (int i = 0; i <= CSP_LOCK; ++i) {
@@ -69,7 +69,7 @@ int main(int argc, char * argv[]) {
     csp_timestamp_t csp_clock = {};
     csp_clock_get_time(&csp_clock);
     csp_assert(csp_clock.tv_sec != 0);
-    csp_log_info("csp_clock_get_time(..) -> sec:nsec = %"PRIu32":%"PRIu32, csp_clock.tv_sec, csp_clock.tv_nsec);
+    csp_log_info("csp_clock_get_time(..) -> sec:nsec = %" PRIu32 ":%" PRIu32, csp_clock.tv_sec, csp_clock.tv_nsec);
 
     // relative time
     const uint32_t msec1 = csp_get_ms();
@@ -83,7 +83,7 @@ int main(int argc, char * argv[]) {
     csp_assert(csp_get_s_isr() >= (sec2 + 1));
 
     // malloc
-    uint32_t * ptr = csp_malloc(sizeof(*ptr));
+    uint32_t* ptr = csp_malloc(sizeof(*ptr));
     csp_assert(ptr != NULL);
     ptr[0] = 10;
     csp_free(ptr);
@@ -92,7 +92,7 @@ int main(int argc, char * argv[]) {
     csp_assert(*ptr == 0);
     ptr[0] = 20;
     csp_free(ptr);
-    
+
     // check thread actually executed
     csp_assert(thread_executed != false);
 
